@@ -26,6 +26,9 @@ class Bird {
   public void setVel(float v){
     yVelocity = v;
   }
+  public float getVel(){
+    return yVelocity;
+  }
 	
 	public float getX (){
 		return xVal;
