@@ -1,6 +1,8 @@
 Bird b = new Bird(5,250);
 PipeSet p;
 PImage penguin;
+PImage ice;
+PImage background;
 
 final float pGap = 150;
 final float pWidth = 75;
@@ -11,12 +13,13 @@ int score = 0;
 
 void setup(){
   size(500,500); 
-  rectMode(CORNERS);
-  imageMode(CENTER);
   textSize(32);
   b.setY(250);
   b.setVel(-10);
   penguin = loadImage("penguin.png");
+  ice = loadImage("ice.png");
+  background = loadImage("background.jpg");
+  background.resize(500,500);
 }
 
 
@@ -32,7 +35,7 @@ void draw(){
     p.tick();
     counter++;
   }
-  if (b.checkCollision(p) || b.getY() > 500 || b.getY() < 0){
+  if (b.checkCollision(p) || b.getY() > 500){
     delay(100);
     counter = 100;
     score = 0;
@@ -45,17 +48,22 @@ void draw(){
   bottom = p.getHeight() + p.getGap()/2;
   
   
-  background(0);
+  background(background);
+  
   pushMatrix();
+  imageMode(CENTER);
   translate(b.getX(),b.getY());
   float temp = map(b.getVel(),20,-20,PI/2,-1*PI/2);
   rotate(temp);
   image(penguin, 0,0,penguin.width/10,penguin.height/10);
-  
   popMatrix();
-  fill(0,251,255);
-  rect(left,0,right,top,0,0,p.getWidth()/5,p.getWidth()/5);
-  rect(left,bottom,right,500,p.getWidth()/5,p.getWidth()/5,0,0);
+  
+  imageMode(CORNERS);
+  image(ice, left,0, right,top);
+  
+  image(ice, left,bottom,right,500);
+  
+  
   if (abs(b.getX()-p.getX()) < 3){
     score++; 
   }
