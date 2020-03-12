@@ -10,6 +10,13 @@ int counter = 100;
 float left, right, top, bottom;
 int score = 0;
 
+int highscore = 0;
+int lastscore = 0;
+
+final int stateGame  = 0; // consts
+final int statePause = 1;
+int state = statePause;    // current
+
 
 void setup(){
   size(500,500); 
@@ -22,8 +29,28 @@ void setup(){
   background.resize(500,500);
 }
 
+void draw() 
+{ 
+  switch (state) {
+  case stateGame: 
+    // Game
+    handleStateGame();
+    break; 
+ 
+  case statePause:
+    // Pause
+    handleStatePause(); 
+    break;
+ 
+  default:
+    // error
+    println("Error number 939; unknown state : " + state+".");
+    exit();
+    break;
+  } 
+} 
 
-void draw(){
+void handleStateGame() {
   b.tick();
   if (mousePressed || keyPressed){
     b.jump(); 
@@ -36,9 +63,15 @@ void draw(){
     counter++;
   }
   if (b.checkCollision(p) || b.getY() > 500){
+    if (score > highscore)
+    {
+      highscore = score;
+    }
+    lastscore = score;
     delay(100);
     counter = 100;
     score = 0;
+    state = statePause;
     setup();
   }
   
@@ -70,4 +103,20 @@ void draw(){
   fill(255,0,240);
   text(score,250,450);
   delay(33);
+}
+
+
+void handleStatePause() 
+{
+  background(0);
+  textSize(50);
+  fill(255);
+  text("Game Over", 125, 200);
+  textSize(25);
+  text("High Score: " + highscore, 160, 250);
+  text("Last Run " + lastscore, 170, 300);
+  text("Press Any Key to Play again", 100, 350);
+  if(mousePressed || keyPressed){
+    state = stateGame;
+  }
 }
